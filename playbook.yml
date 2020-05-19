@@ -1,0 +1,100 @@
+---
+- hosts: all
+  vars_files:
+  - secrets.yml
+  tasks:
+    - name: Ensure wrong hostname is not in hosts file
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '{{ ansible_hostname }}$'
+        state: absent
+        backup: yes
+      when: ansible_hostname != inventory_hostname_short
+
+    - name: Ensure Hostname
+      hostname:
+        name: '{{ inventory_hostname_short }}'
+      when: ansible_hostname != inventory_hostname_short
+
+    - name: Ensure Hostname in hosts file
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '{{ inventory_hostname_short }}$'
+        line: '{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ inventory_hostname_short }}'
+        state: present
+      when: ansible_default_ipv4.address is defined
+
+    - name: Install packages
+      apt:
+        name: 
+          - inkscape
+          - gimp
+          - vim
+          - arduino
+          - pinta
+          - curl
+          - qura
+        state: present
+    - name: VSCode apt_key
+      apt_key:
+        url:  https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+    - name: VSCode Repo
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+        state: present
+    - name: Install VSCode
+      apt:
+        update_cache: yes
+        name: code
+        state: present
+    - name: Install Visicut
+      apt:
+        deb: https://github.com/t-oster/VisiCut/releases/download/1.9-71/visicut_1.9-70-g2c0db535-1_all.deb
+        state: present
+    - name: Apt key Chrome
+      apt_key:
+        url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+        state: present
+    - name: Chrome repo
+      apt_repository:
+        repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+        state: present
+    - name: Install Chrome
+      apt:
+        update_cache: yes
+        name: google-chrome-stable
+        state: present
+    - name: pretixScan 
+      apt:
+        deb: https://download.pretix.eu/public/pretixscan/deb/pretixscan-latest.deb
+        state: present
+    - name: printer driver
+      apt:
+        state: present
+        deb: "{{item}}"
+      loop:
+        - https://download.brother.com/welcome/dlf103242/mfcl8900cdwlpr-1.3.0-0.i386.deb
+        - https://download.brother.com/welcome/dlf103251/mfcl8900cdwcupswrapper-1.4.0-0.i386.deb
+        - https://download.brother.com/welcome/dlf006645/brscan4-0.4.8-1.amd64.deb
+    - name: Drucker einrichten
+      command: brsaneconfig4 -a name=MFC model=MFC-L8900CDW nodename=mfc-l8900cdw.verschwoer.haus
+    - name: User einrichten
+      user: 
+        name: community
+        comment: communityWMDE
+        password: "{{community_admin_password}}"
+        state: present
+        shell: /bin/bash
+    - name: Visicut configutration
+      copy:
+        src: .visicut
+        dest: /home/community/.visicut
+        owner: community
+    - name: WLAN Einstellungen
+      template:
+        src: templates/verschwoerhaus.nmconnection
+        dest: /etc/NetworkManager/system-connections/
+        owner: root
+        group: root
+        mode: '600'

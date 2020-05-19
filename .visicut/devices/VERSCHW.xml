@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<laserDevice version="0">
+  <originBottomLeft>false</originBottomLeft>
+  <jobSentText>Job was sent as '$jobname'
+Please:
+-Close the lid
+-Turn on the Ventilation
+-And press 'start' on the Lasercutter $name</jobSentText>
+  <jobPrefix>visicut </jobPrefix>
+  <laserCutter class="de.thomas_oster.liblasercut.drivers.EpilogZing">
+    <hostname>10.72.0.15</hostname>
+    <port>515</port>
+    <autofocus>false</autofocus>
+    <hideSoftwareFocus>false</hideSoftwareFocus>
+    <bedWidth>600.0</bedWidth>
+    <bedHeight>300.0</bedHeight>
+  </laserCutter>
+  <cameraURL></cameraURL>
+  <cameraTiming>0</cameraTiming>
+  <projectorTiming>0</projectorTiming>
+  <projectorWidth>0</projectorWidth>
+  <projectorHeight>0</projectorHeight>
+  <thumbnailPath>VERSCHW.png</thumbnailPath>
+  <description></description>
+  <name>VERSCHW</name>
+</laserDevice>
