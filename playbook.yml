@@ -34,6 +34,7 @@
           - pinta
           - curl
           - cura
+          - krita
         state: present
     - name: VSCode apt_key
       apt_key:
