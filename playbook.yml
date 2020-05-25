@@ -83,7 +83,7 @@
       user: 
         name: community
         comment: communityWMDE
-        password: "{{community_admin_password}}"
+        password: "{{community_WMDE_password}}"
         state: present
         shell: /bin/bash
     - name: Visicut configutration
@@ -93,7 +93,7 @@
         owner: community
     - name: WLAN Einstellungen
       template:
-        src: templates/verschwoerhaus.nmconnection
+        src: templates/verschwoerhaus.nmconnection.j2
         dest: /etc/NetworkManager/system-connections/
         owner: root
         group: root
