@@ -33,7 +33,7 @@
           - arduino
           - pinta
           - curl
-          - qura
+          - cura
         state: present
     - name: VSCode apt_key
       apt_key:
