@@ -20,10 +20,9 @@
       lineinfile:
         dest: /etc/hosts
         regexp: '{{ inventory_hostname_short }}$'
-        line: '{{ ansible_default_ipv4.address }} {{ inventory_hostname }} {{ inventory_hostname_short }}'
+        line: '127.0.1.1 {{ inventory_hostname }} {{ inventory_hostname_short }}'
         state: present
-      when: ansible_default_ipv4.address is defined
-
+        
     - name: Install packages
       apt:
         name: 
